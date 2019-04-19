@@ -1,5 +1,4 @@
 from matplotlib import pyplot
-import cmocean
 import numpy as np
 import utils
 
@@ -15,6 +14,7 @@ pyplot.ion()
 pathlens = []
 
 for j in range(200):
+    # todo: throw this all into a function.
     pos = np.array(start)
 
     maxit = 10000
