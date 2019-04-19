@@ -9,4 +9,4 @@ Transition probabilities at each location are
 updated based on succeeding to get to the finish, 
 and how many steps it took (relative to a hard cap).
 
-![walker](walker-animation.gif)
+![walker](walker.gif)
