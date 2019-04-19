@@ -44,6 +44,8 @@ for j in range(200):
     pathlens.append( len(path) )
 
     utils.vis_path(ax,path)
+    utils.vis_transition(ax,transition)
+
     for entry in ax.texts:
         entry.remove()
     ax.text(0,0,'iteration %i'%(j+1), fontsize=14, va='center', ha='left', color='w')
