@@ -6,6 +6,10 @@ import utils
 
 level,transition,start,finish = utils.initialize('level2.csv')
 
+fig,ax = utils.vis_level(level)
+
+pyplot.ion()
+
 ###
 
 pathlens = []
@@ -38,11 +42,13 @@ for j in range(100):
     transition = utils.update_transitions(transition, path, actions, rv)
 
     pathlens.append( len(path) )
+
+    utils.vis_path(ax,path)
+    for entry in ax.texts:
+        entry.remove()
+    ax.text(0,0,'iteration %i'%j, fontsize=14, va='center', ha='left', color='w')
+
+    pyplot.pause(0.05)
 #
-
-
-fig,ax = utils.vis_level(level)
-
-ax.plot(path[:,0], path[:,1], c='r', lw=1)
 
 fig.show()
