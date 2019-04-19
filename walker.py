@@ -4,7 +4,7 @@ import numpy as np
 import utils
 
 
-level,transition,start,finish = utils.initialize('level2.csv')
+level,transition,start,finish = utils.initialize('level3.csv')
 
 fig,ax = utils.vis_level(level)
 
@@ -14,10 +14,10 @@ pyplot.ion()
 
 pathlens = []
 
-for j in range(100):
+for j in range(200):
     pos = np.array(start)
 
-    maxit = 1000
+    maxit = 10000
     path = []
     actions = []
     path.append( pos )
@@ -46,7 +46,7 @@ for j in range(100):
     utils.vis_path(ax,path)
     for entry in ax.texts:
         entry.remove()
-    ax.text(0,0,'iteration %i'%j, fontsize=14, va='center', ha='left', color='w')
+    ax.text(0,0,'iteration %i'%(j+1), fontsize=14, va='center', ha='left', color='w')
 
     pyplot.pause(0.05)
 #
