@@ -17,8 +17,8 @@ def initialize(fname):
 
     for i in range(transition.shape[0]):
         for j in range(transition.shape[1]):
-            uldr = get_neighbors([i,j])
-            for k,pair in enumerate(uldr):
+            udlr = get_neighbors([i,j], level)
+            for k,pair in enumerate(udlr):
                 if not level[pair[0],pair[1]]:
                     transition[i,j,k] = 0.
             #
@@ -36,19 +36,28 @@ def load_level(fname):
         csvr = csv.reader(f)
         level = list(csvr)
         if level[0][-1]=='':
-            level = np.array([row[:-1] for row in level], dtype=int)
+            level = np.array([row[:-1] for row in level])
         else:
-            level = np.array(level, dtype=int)
+            level = np.array(level)
     #
+
+    # assume missing entries are meant to be 1.
+    level[level==''] = '1'
+    level = np.array(level, dtype=int)
+
     return level
 #
 
-def get_neighbors(tup):
+def get_neighbors(tup,level):
     import numpy as np
+
+    nX,nY = level.shape
+
     tup = np.array(tup, dtype=int)
-    uldr = np.array([[0,1],[0,-1],[-1,0],[1,0]]) + tup
-    uldr = np.mod(uldr,9)
-    return uldr
+    udlr = np.array([[0,1],[0,-1],[-1,0],[1,0]]) + tup
+    udlr[:2] = np.mod(udlr[:2], nY)
+    udlr[2:] = np.mod(udlr[2:], nX)
+    return udlr
 #
 
 def get_start(levelin):
@@ -165,7 +174,7 @@ if __name__=="__main__":
     import numpy as np
     from matplotlib import pyplot
 
-    level,transition,start,finish = initialize('level1.csv')
+    level,transition,start,finish = initialize('level3.csv')
 
     fig,ax = vis_level(level)
     vis_transition(ax,transition)

@@ -25,7 +25,7 @@ for j in range(100):
     for k in range(maxit):
         action = utils.select_action(transition[pos[0],pos[1],:])
 
-        pos = utils.get_neighbors(pos)[action]
+        pos = utils.get_neighbors(pos,level)[action]
         path.append( pos )
         actions.append( action )
 
