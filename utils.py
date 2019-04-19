@@ -284,6 +284,9 @@ def vis_transition(myax, trs, remove_old=True):
     import numpy as np
     scaling = 0.6
 
+    if remove_old:
+        for art in myax.artists[::-1]: art.remove()
+
     for i in range(trs.shape[0]):
         for j in range(trs.shape[1]):
             tr = trs[i,j,:]
