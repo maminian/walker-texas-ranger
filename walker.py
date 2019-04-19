@@ -4,7 +4,7 @@ import numpy as np
 import utils
 
 
-level,transition,start,finish = utils.initialize('level3.csv')
+level,transition,start,finish = utils.initialize('level1.csv')
 
 fig,ax = utils.vis_level(level)
 
