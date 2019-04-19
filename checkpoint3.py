@@ -4,52 +4,42 @@ import numpy as np
 import utils
 
 
-level = utils.load_level('level1.csv')
-start = utils.get_start(level)
-finish = utils.get_finish(level)
-
-
-#
-# initialize transition matrix
-# this will be normalized after boundaries are
-# excluded from the state.
-#
-transition = np.ones( list(level.shape)+[4], dtype=float)
-
-for i in range(transition.shape[0]):
-    for j in range(transition.shape[1]):
-        uldr = utils.get_neighbors([i,j])
-        for k,pair in enumerate(uldr):
-            if not level[pair[0],pair[1]]:
-                transition[i,j,k] = 0.
-        #
-        transition[i,j,:] /= np.sum(transition[i,j,:])
-#
+level,transition,start,finish = utils.initialize('level2.csv')
 
 ###
 
-pos = np.array(start)
+pathlens = []
 
-maxit = 1000
-path = []
-actions = []
-path.append( pos )
-completed = False
-for k in range(maxit):
-    action = utils.select_action(transition[pos[0],pos[1],:])
+for j in range(100):
+    pos = np.array(start)
 
-    pos = utils.get_neighbors(pos)[action]
+    maxit = 1000
+    path = []
+    actions = []
     path.append( pos )
-    actions.append( action )
+    completed = False
+    for k in range(maxit):
+        action = utils.select_action(transition[pos[0],pos[1],:])
 
-    if all( pos==finish ):
-        completed = True
-        break
+        pos = utils.get_neighbors(pos)[action]
+        path.append( pos )
+        actions.append( action )
+
+        if all( pos==finish ):
+            completed = True
+            break
+        #
+        #_ = input()
     #
-    #_ = input()
+
+    path = np.array(path)
+
+    rv = utils.reward(path, completed, maxit)
+    transition = utils.update_transitions(transition, path, actions, rv)
+
+    pathlens.append( len(path) )
 #
 
-path = np.array(path)
 
 fig,ax = utils.vis_level(level)
 
