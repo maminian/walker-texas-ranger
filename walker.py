@@ -50,6 +50,8 @@ for j in range(200):
         entry.remove()
     ax.text(0,0,'iteration %i'%(j+1), fontsize=14, va='center', ha='left', color='w')
 
+    # one-off for creating frames to make a gif.
+    # fig.savefig('frames/iter_%s.png'%str(j).zfill(4), dpi=120, bbox_inches='tight')
     pyplot.pause(0.05)
 #
 
