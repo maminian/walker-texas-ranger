@@ -42,7 +42,7 @@ def initialize(fname):
                 if not level[pair[0],pair[1]]:
                     transition[i,j,k] = 0.
             #
-            transition[i,j,:] /= np.sum(transition[i,j,:])
+            transition[i,j] /= np.sum(transition[i,j])
     #
     transition[np.where(np.isnan(transition))]
 
@@ -236,6 +236,7 @@ def update_transitions(trs,path,actions,rv, kappa=0.1):
 #
 # Visualization tools below
 #
+#################################################
 
 def vis_level(level, show=True):
     '''
@@ -254,11 +255,12 @@ def vis_level(level, show=True):
         import cmocean
         mycm = cmocean.cm.algae_r
     except:
-        mycm = pyplot.cm.inferno_r
+        mycm = pyplot.cm.gnuplot2
     #
 
     fig,ax = pyplot.subplots(1,1, figsize=(6,6))
     ax.imshow(level.T, cmap=mycm)
+    ax.invert_yaxis()
     fig.tight_layout()
 
     if show: fig.show()
@@ -289,19 +291,19 @@ def vis_transition(myax, trs, remove_old=True):
 
     for i in range(trs.shape[0]):
         for j in range(trs.shape[1]):
-            tr = trs[i,j,:]
+            tr = trs[i,j]
             for k in range(4):
                 if tr[k]==0:
                     # don't draw length-zero vectors
                     continue
                 # note: directions is defined at the top of this file.
                 vec = scaling*tr[k]*directions[k]
-                drawarrow(myax, i, j, vec[0], vec[1])
+                _drawarrow(myax, i, j, vec[0], vec[1])
     #
     return
 #
 
-def drawarrow(myax,x,y,dx,dy):
+def _drawarrow(myax,x,y,dx,dy):
     '''
     Helper function for vis_transition(). Draws arrows with chosen properties.
     '''
@@ -335,6 +337,22 @@ def vis_path(ax, mypath, remove_old=True):
     mypath = np.array(mypath)
     ax.plot(mypath[:,0], mypath[:,1],lw=3, alpha=0.7, c=pyplot.cm.tab10(1))
     return
+#
+
+def get_argmax_path(trs,start,finish,maxit):
+    import numpy as np
+    path = []
+    pos = np.array(start)
+    path.append(pos)
+    for j in range(maxit):
+        action = np.argmax(trs[pos[0],pos[1]])
+
+        pos += np.array([[0,1],[0,-1],[0,-1],[0,1]],dtype=int)[action]
+        path.append(pos)
+        if all(pos==finish):
+            break
+        #
+    return np.array(path)
 #
 
 if __name__=="__main__":

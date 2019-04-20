@@ -2,7 +2,6 @@ from matplotlib import pyplot
 import numpy as np
 import utils
 
-
 level,transition,start,finish = utils.initialize('level1.csv')
 
 fig,ax = utils.vis_level(level)
@@ -13,7 +12,7 @@ pyplot.ion()
 
 pathlens = []
 
-for j in range(200):
+for j in range(100):
     # todo: throw this all into a function.
     pos = np.array(start)
 
@@ -43,16 +42,20 @@ for j in range(200):
 
     pathlens.append( len(path) )
 
-    utils.vis_path(ax,path)
-    utils.vis_transition(ax,transition)
+    if j%1==0:
+        utils.vis_path(ax,path)
+        utils.vis_transition(ax,transition)
 
-    for entry in ax.texts:
-        entry.remove()
-    ax.text(0,0,'iteration %i'%(j+1), fontsize=14, va='center', ha='left', color='w')
+        for entry in ax.texts:
+            entry.remove()
 
-    # save frames for animation.
-    # fig.savefig('iter_%s'%str(j).zfill(4), dpi=120, bbox_inches='tight')
-    pyplot.pause(0.05)
+        bbox=dict(facecolor='k', edgecolor='black', alpha=0.3)
+        ax.text(0,0,'iteration %i'%(j+1), fontsize=14, va='center', ha='left', color='w',bbox=bbox)
+
+        # save frames for animation.
+        # fig.savefig('iter_%s'%str(j).zfill(4), dpi=120, bbox_inches='tight')
+        pyplot.pause(0.02)
+    #
 #
 
 fig.show()
